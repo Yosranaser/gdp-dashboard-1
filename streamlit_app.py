@@ -5,13 +5,17 @@ from pathlib import Path
 import pickle
 
 # Streamlit app title
-st.title("Model Testing")
+st.title("predicting based on diagnostic measurements whether you have diabetes.")
 
 # Input fields
-engine_size = st.number_input('engine_size', min_value=0, max_value=10, value=1)
-cylinder = st.number_input('cylinder', min_value=0, max_value=10, value=1)
-fuel_computation = st.number_input('fuel_computation', min_value=0, max_value=10, value=1)
-
+Pregnancies = st.number_input('Pregnancies', min_value=0, max_value=10, value=1)
+Glucose = st.number_input('Glucose', min_value=0, max_value=10, value=1)
+BloodPressure = st.number_input('BloodPressure', min_value=0, max_value=10, value=1)
+SkinThickness = st.number_input('SkinThickness', min_value=0, max_value=10, value=1)
+Insulin = st.number_input('Insulin', min_value=0, max_value=10, value=1)
+BMI = st.number_input('BMI', min_value=0, max_value=10, value=1)
+DiabetesPedigreeFunction = st.number_input('DiabetesPedigreeFunction', min_value=0, max_value=10, value=1)
+Age = st.number_input('Age', min_value=0, max_value=10, value=1)
 # Load the model
 with open('model (1).pkl', 'rb') as file:
     model = pickle.load(file)
