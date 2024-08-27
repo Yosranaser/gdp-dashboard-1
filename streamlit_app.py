@@ -17,12 +17,12 @@ BMI = st.number_input('BMI', min_value=0, max_value=10, value=1)
 DiabetesPedigreeFunction = st.number_input('DiabetesPedigreeFunction', min_value=0, max_value=10, value=1)
 Age = st.number_input('Age', min_value=0, max_value=10, value=1)
 # Load the model
-with open('model (1).pkl', 'rb') as file:
+with open('model (2).pkl.pkl', 'rb') as file:
     model = pickle.load(file)
 
 # Predict using the model
-output = model.predict([[engine_size, cylinder, fuel_computation]])
+output = model.predict([[Pregnancies, Glucose, BloodPressure,SkinThickness,Insulin,BMI,DiabetesPedigreeFunction,Age]])
 
 # Display the result
-st.write("Car CO2 emission is", output[0])
+st.write("prediction is", output[0])
 
