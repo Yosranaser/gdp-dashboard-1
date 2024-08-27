@@ -13,7 +13,7 @@ cylinder = st.number_input('cylinder', min_value=0, max_value=10, value=1)
 fuel_computation = st.number_input('fuel_computation', min_value=0, max_value=10, value=1)
 
 # Load the model
-with open('model.pkl', 'rb') as file:
+with open('model (1).pkl', 'rb') as file:
     model = pickle.load(file)
 
 # Predict using the model
