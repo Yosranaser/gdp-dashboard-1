@@ -17,7 +17,7 @@ BMI = st.number_input('BMI', min_value=0, max_value=10, value=1)
 DiabetesPedigreeFunction = st.number_input('DiabetesPedigreeFunction', min_value=0, max_value=10, value=1)
 Age = st.number_input('Age', min_value=0, max_value=10, value=1)
 # Load the model
-with open('model (2).pkl.pkl', 'rb') as file:
+with open('model (2).pkl', 'rb') as file:
     model = pickle.load(file)
 
 # Predict using the model
