@@ -3,11 +3,22 @@ import pandas as pd
 import math
 from pathlib import Path
 import pickle
-st.title("model testing")
-engine_size=st.number_input('engine_size',min_value=0,max_value=10,value=1)
-clylinder=st.number_input('clylinder',min_value=0,max_value=10,value=1)
-fuelcompution=st.number_input('fuelcompution',min_value=0,max_value=10,value=1)
+
+# Streamlit app title
+st.title("Model Testing")
+
+# Input fields
+engine_size = st.number_input('engine_size', min_value=0, max_value=10, value=1)
+cylinder = st.number_input('cylinder', min_value=0, max_value=10, value=1)
+fuel_computation = st.number_input('fuel_computation', min_value=0, max_value=10, value=1)
+
+# Load the model
 with open('model.pkl', 'rb') as file:
-model = pickle.load(file)
-model.predict([[engine_size,clylinder,fuelcompution]])
-st.write("car of co2 is",output[0][0])
+    model = pickle.load(file)
+
+# Predict using the model
+output = model.predict([[engine_size, cylinder, fuel_computation]])
+
+# Display the result
+st.write("Car CO2 emission is", output[0])
+
