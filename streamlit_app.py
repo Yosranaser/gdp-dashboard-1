@@ -28,9 +28,9 @@ DiabetesPedigreeFunction = st.sidebar.number_input('Diabetes Pedigree Function',
 Age = st.sidebar.number_input('Age', min_value=21, max_value=81, value=21)
 
 # Load the model
-model_path = 'model.pkl'  # Ensure this is the correct path to your model
+# model_path = 'model.pkl'  # Ensure this is the correct path to your model
 try:
-    with open(model_path, 'rb') as file:
+    with open('model (2)', 'rb') as file:
         model = pickle.load(file)
     
     # Button for prediction
