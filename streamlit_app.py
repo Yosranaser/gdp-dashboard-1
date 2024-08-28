@@ -30,7 +30,7 @@ Age = st.sidebar.number_input('Age', min_value=21, max_value=81, value=21)
 # Load the model
 # model_path = 'model.pkl'  # Ensure this is the correct path to your model
 try:
-    with open('model (2)', 'rb') as file:
+    with open('model (2).pkl', 'rb') as file:
         model = pickle.load(file)
     
     # Button for prediction
@@ -42,7 +42,7 @@ try:
         # Display the result
         st.success(f"The model predicts that the patient is: *{result}*")
 except FileNotFoundError:
-    st.error(f"Model file not found: {'model (2)'}")
+    st.error(f"Model file not found: {'model (2).pkl'}")
 except Exception as e:
     st.error(f"An error occurred: {e}")
 
