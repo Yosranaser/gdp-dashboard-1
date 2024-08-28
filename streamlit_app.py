@@ -42,7 +42,7 @@ try:
         # Display the result
         st.success(f"The model predicts that the patient is: *{result}*")
 except FileNotFoundError:
-    st.error(f"Model file not found: {model_path}")
+    st.error(f"Model file not found: {'model (2)'}")
 except Exception as e:
     st.error(f"An error occurred: {e}")
 
