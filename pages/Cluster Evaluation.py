@@ -73,7 +73,7 @@ def load_data():
 def preprocess_data(data):
     # Assuming you want to cluster on numerical columns
     # Replace 'numerical_feature_1', 'numerical_feature_2', etc. with actual column names
-    features = data[['numerical_feature_1', 'numerical_feature_2', 'numerical_feature_3']] 
+    features = data[['Quantity', 'UnitPrice', 'CustomerID']] 
     
     # Standardize the features
     scaler = StandardScaler()
