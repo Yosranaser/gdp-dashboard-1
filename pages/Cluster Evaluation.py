@@ -59,17 +59,29 @@ def cluster_evaluation(X):
     """)
 
 # Function to load CSV data from user input
+# Function to load CSV data from user input
 def load_data():
     st.title("Upload Your Dataset")
     uploaded_file = st.file_uploader("Upload your CSV file", type="csv")
+    
     if uploaded_file is not None:
-        data = pd.read_csv(uploaded_file)
+        try:
+            # Attempt to read the CSV file with UTF-8 encoding
+            data = pd.read_csv(uploaded_file)
+        except UnicodeDecodeError:
+            # If UTF-8 fails, try reading with ISO-8859-1 encoding
+            data = pd.read_csv(uploaded_file, encoding='ISO-8859-1')
+        except Exception as e:
+            st.error(f"Error reading the file: {e}")
+            return None
+            
         st.write("Dataset preview:")
         st.write(data.head())
         return data
     else:
         st.warning("Please upload a CSV file.")
         return None
+
 
 # Preprocessing function to prepare the dataset for K-means
 def preprocess_data(data):
