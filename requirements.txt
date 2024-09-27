@@ -1,3 +1,7 @@
+streamlit
 pandas
-scikit-learn
-joblib
+scikit-learn==1.0.2
+matplotlib
+seaborn
+pickle5
+rarfile
