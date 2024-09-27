@@ -1,5 +1,6 @@
 import streamlit as st
-import numpy as np
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 import matplotlib.pyplot as plt
@@ -57,7 +58,38 @@ def cluster_evaluation(X):
     where a value near 1 indicates that the sample is far away from the neighboring clusters, while a value near 0 indicates overlapping clusters.
     """)
 
-# Example usage in the navigation section
-if st.sidebar.selectbox("Choose a page", ["User Input", "Dashboard", "Model Overview", "Cluster Evaluation"]) == "Cluster Evaluation":
-    # Assume X is your dataset; you can pass your data here
-    cluster_evaluation(X)
+# Load your dataset
+def load_data():
+    # You can replace this with your actual dataset path
+    data = pd.read_csv('your_dataset.csv')
+    
+    # Display the raw data
+    st.write("Dataset preview:")
+    st.write(data.head())
+    
+    return data
+
+# Preprocessing function to prepare the dataset for K-means
+def preprocess_data(data):
+    # Assuming you want to cluster on numerical columns
+    # Replace 'numerical_feature_1', 'numerical_feature_2', etc. with actual column names
+    features = data[['numerical_feature_1', 'numerical_feature_2', 'numerical_feature_3']] 
+    
+    # Standardize the features
+    scaler = StandardScaler()
+    X = scaler.fit_transform(features)
+    
+    return X
+
+# Main function
+def main():
+    # Sidebar navigation
+    page = st.sidebar.selectbox("Choose a page", ["User Input", "Dashboard", "Model Overview", "Cluster Evaluation"])
+    
+    if page == "Cluster Evaluation":
+        data = load_data()
+        X = preprocess_data(data)
+        cluster_evaluation(X)
+
+if __name__ == "__main__":
+    main()
