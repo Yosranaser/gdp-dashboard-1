@@ -58,21 +58,23 @@ def cluster_evaluation(X):
     where a value near 1 indicates that the sample is far away from the neighboring clusters, while a value near 0 indicates overlapping clusters.
     """)
 
-# Load your dataset
+# Function to load CSV data from user input
 def load_data():
-    # You can replace this with your actual dataset path
-    data = pd.read_csv('your_dataset.csv')
-    
-    # Display the raw data
-    st.write("Dataset preview:")
-    st.write(data.head())
-    
-    return data
+    st.title("Upload Your Dataset")
+    uploaded_file = st.file_uploader("Upload your CSV file", type="csv")
+    if uploaded_file is not None:
+        data = pd.read_csv(uploaded_file)
+        st.write("Dataset preview:")
+        st.write(data.head())
+        return data
+    else:
+        st.warning("Please upload a CSV file.")
+        return None
 
 # Preprocessing function to prepare the dataset for K-means
 def preprocess_data(data):
     # Assuming you want to cluster on numerical columns
-    # Replace 'numerical_feature_1', 'numerical_feature_2', etc. with actual column names
+    # Replace 'Quantity', 'UnitPrice', 'CustomerID' with actual column names from your dataset
     features = data[['Quantity', 'UnitPrice', 'CustomerID']] 
     
     # Standardize the features
@@ -87,9 +89,10 @@ def main():
     page = st.sidebar.selectbox("Choose a page", ["User Input", "Dashboard", "Model Overview", "Cluster Evaluation"])
     
     if page == "Cluster Evaluation":
-        data = load_data()
-        X = preprocess_data(data)
-        cluster_evaluation(X)
+        data = load_data()  # Get user input
+        if data is not None:
+            X = preprocess_data(data)
+            cluster_evaluation(X)
 
 if __name__ == "__main__":
     main()
