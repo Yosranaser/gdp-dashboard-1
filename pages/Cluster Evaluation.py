@@ -60,16 +60,15 @@ def cluster_evaluation(X):
 
 # Function to load CSV data from user input
 # Function to load CSV data from user input
+# Function to load CSV data from user input
 def load_data():
     st.title("Upload Your Dataset")
     uploaded_file = st.file_uploader("Upload your CSV file", type="csv")
     
     if uploaded_file is not None:
         try:
-            # Attempt to read the CSV file with UTF-8 encoding
             data = pd.read_csv(uploaded_file)
         except UnicodeDecodeError:
-            # If UTF-8 fails, try reading with ISO-8859-1 encoding
             data = pd.read_csv(uploaded_file, encoding='ISO-8859-1')
         except Exception as e:
             st.error(f"Error reading the file: {e}")
@@ -82,11 +81,14 @@ def load_data():
         st.warning("Please upload a CSV file.")
         return None
 
-
 # Preprocessing function to prepare the dataset for K-means
 def preprocess_data(data):
-    # Assuming you want to cluster on numerical columns
-    # Replace 'Quantity', 'UnitPrice', 'CustomerID' with actual column names from your dataset
+    # Check the column names
+    st.write("Column names in the dataset:")
+    st.write(data.columns.tolist())
+    
+    # Modify this list based on your actual dataset's columns
+    # Make sure to match the actual names in your CSV
     features = data[['Quantity', 'UnitPrice', 'CustomerID']] 
     
     # Standardize the features
