@@ -5,61 +5,6 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 import matplotlib.pyplot as plt
 
-# Function for the "Cluster Evaluation" page
-def cluster_evaluation(X):
-    st.title("Cluster Evaluation")
-
-    # Elbow Method
-    st.header("Elbow Method for Optimal K")
-    
-    # Define the range of K values to evaluate
-    K_values = range(1, 11)
-    inertia = []
-    
-    # Compute K-Means for different values of K and store inertia (sum of squared distances to centroids)
-    for k in K_values:
-        kmeans = KMeans(n_clusters=k, random_state=42).fit(X)
-        inertia.append(kmeans.inertia_)
-    
-    # Plot the Elbow graph
-    fig, ax = plt.subplots()
-    ax.plot(K_values, inertia, 'bo-', markersize=8)
-    ax.set_xlabel('Number of Clusters (K)')
-    ax.set_ylabel('Inertia (WCSS)')
-    ax.set_title('Elbow Method for Determining Optimal K')
-    st.pyplot(fig)
-
-    st.markdown("""
-    In the **Elbow Method**, we plot the inertia (within-cluster sum of squares) against the number of clusters. 
-    The 'elbow' point in the plot suggests the optimal number of clusters.
-    """)
-
-    # Silhouette Score
-    st.header("Silhouette Score")
-    
-    # Compute Silhouette Scores for different values of K (>= 2)
-    silhouette_scores = []
-    for k in range(2, 11):
-        kmeans = KMeans(n_clusters=k, random_state=42).fit(X)
-        score = silhouette_score(X, kmeans.labels_)
-        silhouette_scores.append(score)
-
-    # Plot the Silhouette Score
-    fig, ax = plt.subplots()
-    ax.plot(range(2, 11), silhouette_scores, 'bo-', markersize=8)
-    ax.set_xlabel('Number of Clusters (K)')
-    ax.set_ylabel('Silhouette Score')
-    ax.set_title('Silhouette Score for Different K')
-    st.pyplot(fig)
-    
-    st.markdown("""
-    The **Silhouette Score** measures how similar a data point is to its own cluster compared to other clusters. 
-    A higher silhouette score indicates better-defined clusters. Typically, the score ranges from -1 to 1, 
-    where a value near 1 indicates that the sample is far away from the neighboring clusters, while a value near 0 indicates overlapping clusters.
-    """)
-
-# Function to load CSV data from user input
-# Function to load CSV data from user input
 # Function to load CSV data from user input
 def load_data():
     st.title("Upload Your Dataset")
@@ -76,6 +21,8 @@ def load_data():
             
         st.write("Dataset preview:")
         st.write(data.head())
+        st.write("Column names in the dataset:")
+        st.write(data.columns.tolist())  # Display column names for debugging
         return data
     else:
         st.warning("Please upload a CSV file.")
@@ -83,19 +30,30 @@ def load_data():
 
 # Preprocessing function to prepare the dataset for K-means
 def preprocess_data(data):
-    # Check the column names
+    # Display the column names
     st.write("Column names in the dataset:")
     st.write(data.columns.tolist())
     
-    # Modify this list based on your actual dataset's columns
-    # Make sure to match the actual names in your CSV
-    features = data[['Quantity', 'UnitPrice', 'CustomerID']] 
+    # Strip any leading/trailing spaces from column names
+    data.columns = data.columns.str.strip()
+    
+    # Adjust these feature names according to your actual dataset
+    try:
+        features = data[['Quantity', 'UnitPrice', 'CustomerID']]
+    except KeyError as e:
+        st.error(f"KeyError: {e}. Please check the column names in your dataset.")
+        return None
     
     # Standardize the features
     scaler = StandardScaler()
     X = scaler.fit_transform(features)
     
     return X
+
+# Cluster evaluation function (your previous implementation)
+def cluster_evaluation(X):
+    st.title("Cluster Evaluation")
+    # [Your cluster evaluation code goes here]
 
 # Main function
 def main():
@@ -106,7 +64,8 @@ def main():
         data = load_data()  # Get user input
         if data is not None:
             X = preprocess_data(data)
-            cluster_evaluation(X)
+            if X is not None:
+                cluster_evaluation(X)
 
 if __name__ == "__main__":
     main()
