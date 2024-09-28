@@ -27,11 +27,11 @@ def load_data():
 st.title("Customer Profiles / Segments")
 
 # Select customer segment to display its characteristics
-unique_segments = df['Predicted_Cluster'].unique()
+unique_segments = df['Cluster'].unique()
 selected_segment = st.selectbox("Select Customer Segment", unique_segments)
 
 # Filter the dataset for the selected segment
-segment_data = df[df['Predicted_Cluster'] == selected_segment]
+segment_data = df[df['Cluster'] == selected_segment]
 
 # Display key statistics of the selected segment
 st.write(f"### Overview of Segment {selected_segment}")
