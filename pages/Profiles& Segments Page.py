@@ -8,12 +8,20 @@ import seaborn as sns
 # Sample function to load your clustered data
 # Assuming you have a 'Segment' column indicating customer segment
 def load_data():
-    # Replace with your actual data loading logic
-    data = pd.read_csv("clustered_customers.csv")  
-    return data
+    st.title("Upload Your Dataset")
+    uploaded_file = st.file_uploader("Upload your CSV file", type="csv")
+    
+    if uploaded_file is not None:
+        try:
+            df = pd.read_csv(uploaded_file)
+        except UnicodeDecodeError:
+            data = pd.read_csv(uploaded_file, encoding='ISO-8859-1')
+        except Exception as e:
+            st.error(f"Error reading the file: {e}")
+            return None
 
 # Load data
-df = load_data()
+#df = load_data()
 
 # Page title
 st.title("Customer Profiles / Segments")
