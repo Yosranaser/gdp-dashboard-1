@@ -3,6 +3,9 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.cluster import KMeans
 
+# Initialize the LabelEncoder globally to encode 'Genre' only once
+encoder = LabelEncoder()
+
 # Function to take user input and return as DataFrame
 def user_input_features():
     st.sidebar.header('Enter Customer Information')
@@ -27,7 +30,7 @@ def load_and_preprocess_data():
     df = pd.read_csv('Mall_Customers.csv')
 
     # Preprocessing: Encode Genre, scale Age, Annual Income, and Spending Score
-    df['Genre'] = LabelEncoder().fit_transform(df['Genre'])
+    df['Genre'] = encoder.fit_transform(df['Genre'])
     X = df[['Genre', 'Age', 'Annual Income (k$)', 'Spending Score (1-100)']]
 
     # Standardizing the numerical features
@@ -38,8 +41,8 @@ def load_and_preprocess_data():
 
 # Function to preprocess user input the same way the dataset was preprocessed
 def preprocess_user_input(input_data, scaler):
-    # Encode 'Genre'
-    input_data['Genre'] = LabelEncoder().fit_transform(input_data['Genre'])
+    # Encode 'Genre' only for the user input
+    input_data['Genre'] = encoder.transform(input_data['Genre'])
 
     # Standardize the features
     input_scaled = scaler.transform(input_data)
