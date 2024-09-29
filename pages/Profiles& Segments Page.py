@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle
-
+df = pd.read_csv("Mall_Customers.csv")
 
 def profile_section(data):
     st.title("Customer Profile")
