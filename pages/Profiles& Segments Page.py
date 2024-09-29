@@ -1,36 +1,9 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-import pickle
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.cluster import KMeans
-df = pd.read_csv("Mall_Customers.csv")
 
-def profile_section(data):
-    st.title("Customer Profile")
-    
-    # Basic Statistics
-    st.subheader("Basic Statistics")
-    st.write(data.describe())
-    
-    # Gender distribution (assuming there's a 'Gender' column)
-    if 'Gender' in data.columns:
-        gender_counts = data['Genre'].value_counts()
-        st.subheader("Gender Distribution")
-        st.bar_chart(gender_counts)
-    
-    # Spending distribution
-    if 'TotalSpent' in data.columns:
-        st.subheader("Spending Distribution")
-        plt.figure(figsize=(10, 5))
-        plt.hist(data['TotalSpent'], bins=30)
-        st.pyplot(plt)
-profile_section(df)
-
-
-# Function to take user input and predict the cluster
+# Function to take user input and return as DataFrame
 def user_input_features():
     st.sidebar.header('Enter Customer Information')
     
@@ -46,8 +19,7 @@ def user_input_features():
             'Annual Income (k$)': annual_income,
             'Spending Score (1-100)': spending_score}
     
-    features = pd.DataFrame([data])
-    
+    features = pd.DataFrame([data])  # Store user input in DataFrame
     return features
 
 # Load and preprocess data for fitting K-means
@@ -80,9 +52,23 @@ def predict_cluster(model, input_scaled):
     cluster_label = model.predict(input_scaled)
     return cluster_label
 
+# Function to store data in a CSV
+def save_data_to_csv(user_data):
+    # Load existing data or create new DataFrame if file doesn't exist
+    try:
+        existing_data = pd.read_csv('user_data.csv')
+        new_data = pd.concat([existing_data, user_data], ignore_index=True)
+    except FileNotFoundError:
+        new_data = user_data
+
+    # Save the updated DataFrame to CSV
+    new_data.to_csv('user_data.csv', index=False)
+
+    return new_data
+
 # Main app function
 def main():
-    st.title("Customer Segmentation using K-Means")
+    st.title("Customer Segmentation and Data Collection")
 
     # Load and preprocess the dataset for training the K-means model
     X_scaled, scaler = load_and_preprocess_data()
@@ -93,15 +79,25 @@ def main():
 
     # Take user input
     user_data = user_input_features()
-    
+
     # Preprocess user input for the model
     input_scaled = preprocess_user_input(user_data, scaler)
-    
+
     # Predict the cluster for the user's input
     cluster = predict_cluster(kmeans_model, input_scaled)
 
+    # Add the predicted cluster to the user data
+    user_data['Cluster'] = cluster[0]
+
+    # Save the user data to a CSV and get the updated DataFrame
+    updated_data = save_data_to_csv(user_data)
+
     # Display the predicted cluster
     st.write(f"The customer belongs to Cluster: {cluster[0]}")
+
+    # Display the updated table with all user inputs
+    st.write("Updated User Data:")
+    st.dataframe(updated_data)
 
 if __name__ == "__main__":
     main()
