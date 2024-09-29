@@ -39,8 +39,6 @@ col4, col5, col6 = st.columns(3)
 
 # 4. Scatter Plot: Annual Income vs Spending Score
 # Load your DataFrame (assuming it's already loaded)
-df = pd.read_csv('Mall_Customers.csv')
-
 # Check the columns and data types
 st.write("### DataFrame Columns and Data Types")
 st.write(df.dtypes)
@@ -75,7 +73,7 @@ with col4:
 with col5:
     st.write("#### Gender Distribution")
     gender_counts = df['Genre'].value_counts()
-    fig_gender = px.pie(values=gender_counts, names=gender_counts.index, title='Gender Distribution of Customers')
+    fig_gender = px.pie(values=gender_counts, names=gender_counts.index, title='Genre Distribution of Customers')
     st.plotly_chart(fig_gender)
 
 # 6. Heatmap: Correlations between features
@@ -104,7 +102,8 @@ with col6:
                                  title='Annual Income vs Spending Score', color='Genre', hover_data=['Age'])
         st.plotly_chart(fig_scatter)
     except KeyError as e:
-    st.error(f"KeyError: One of the specified columns does not exist: {e}")
+        st.error(f"KeyError: One of the specified columns does not exist: {e}")
+
     st.write("#### Feature Correlation Heatmap")
     corr = df.corr()
     fig_heatmap = go.Figure(data=go.Heatmap(
