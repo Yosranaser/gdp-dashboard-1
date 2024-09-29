@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle
 
-# Sample function to load your clustered data
+# Function to load the data
 def load_data():
     st.title("Upload Your Dataset")
     uploaded_file = st.file_uploader("Upload your CSV file", type="csv")
@@ -36,11 +36,19 @@ st.title("Customer Profiles / Segments")
 with open('kmeans_model (1).pkl', 'rb') as file:
     kmeans = pickle.load(file)
 
-# Ensure the dataset is prepared the same way it was during training
-# df = preprocess(df)  # Add your preprocessing steps here if necessary
+# Define the required columns for prediction
+required_columns = ['Quantity', 'UnitPrice']
+
+# Check if all required columns are present in the dataset
+missing_columns = [col for col in required_columns if col not in df.columns]
+
+# If there are missing columns, show an error and stop the app
+if missing_columns:
+    st.error(f"Missing columns in the dataset: {', '.join(missing_columns)}")
+    st.stop()
 
 # Predict the clusters using the K-Means model
-df['Cluster'] = kmeans.predict(df[['Quantity','UnitPrice']])
+df['Cluster'] = kmeans.predict(df[required_columns])
 
 # Now, you can access the unique clusters
 unique_segments = df['Cluster'].unique()
@@ -69,13 +77,7 @@ for col in df.columns:
 st.write("### Radar Chart of Key Features")
 
 # Define key features to visualize (replace with your own)
-key_features = ['Quantity', 'UnitPrice', 'CustomerID']  # Replace with relevant features
-
-# Check if key features exist in the dataset
-for feature in key_features:
-    if feature not in df.columns:
-        st.error(f"Feature '{feature}' not found in the dataset.")
-        st.stop()
+key_features = ['Quantity', 'UnitPrice']  # Replace with relevant features
 
 # Create a dataframe to store the mean of these features
 segment_means = segment_data[key_features].mean()
