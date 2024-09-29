@@ -37,8 +37,6 @@ with col3:
 st.write("### Row 2: Advanced Visualizations")
 col4, col5, col6 = st.columns(3)
 
-# 4. Scatter Plot: Annual Income vs Spending Score
-# Load your DataFrame (assuming it's already loaded)
 # Check the columns and data types
 st.write("### DataFrame Columns and Data Types")
 st.write(df.dtypes)
@@ -46,6 +44,7 @@ st.write(df.dtypes)
 # Display the first few rows of the DataFrame
 st.write("### Preview of DataFrame")
 st.write(df.head())
+
 with col4:
     st.write("### Available Columns in DataFrame")
     st.write(df.columns.tolist())
@@ -81,35 +80,33 @@ with col6:
     # Check for non-numeric columns
     non_numeric_columns = df.select_dtypes(exclude=['number']).columns.tolist()
     if non_numeric_columns:
-        st.write("### Non-Numeric Columns")
+        st.write("### Non-Numeric Columns Detected")
         st.write(non_numeric_columns)
     
-    # Optionally, you can drop non-numeric columns if they are not needed for correlation
+    # Filter only numeric columns
     df_numeric = df.select_dtypes(include=['number'])
     
+    # Drop rows with NaN values in numeric columns
+    df_numeric_clean = df_numeric.dropna()
+    
+    # Debug: Show the cleaned numeric DataFrame
+    st.write("### Cleaned Numeric DataFrame for Correlation")
+    st.write(df_numeric_clean.head())
+    
     # Calculate correlation matrix if there are numeric columns
-    if not df_numeric.empty:
-        corr = df_numeric.corr()
+    if not df_numeric_clean.empty:
+        corr = df_numeric_clean.corr()
         st.write("### Correlation Matrix")
         st.write(corr)
+        
+        # Plot Heatmap
+        st.write("#### Feature Correlation Heatmap")
+        fig_heatmap = go.Figure(data=go.Heatmap(
+            z=corr.values,
+            x=corr.columns,
+            y=corr.columns,
+            colorscale='Viridis'))
+        fig_heatmap.update_layout(title='Correlation between Features', xaxis_nticks=36)
+        st.plotly_chart(fig_heatmap)
     else:
         st.error("No numeric columns available for correlation.")
-    
-    # Other visualizations can follow...
-    try:
-        df_filtered = df.dropna(subset=['Annual Income (k$)', 'Spending Score (1-100)', 'Genre', 'Age'])
-        fig_scatter = px.scatter(df_filtered, x='Annual Income (k$)', y='Spending Score (1-100)', 
-                                 title='Annual Income vs Spending Score', color='Genre', hover_data=['Age'])
-        st.plotly_chart(fig_scatter)
-    except KeyError as e:
-        st.error(f"KeyError: One of the specified columns does not exist: {e}")
-
-    st.write("#### Feature Correlation Heatmap")
-    corr = df.corr()
-    fig_heatmap = go.Figure(data=go.Heatmap(
-        z=corr.values,
-        x=corr.columns,
-        y=corr.columns,
-        colorscale='Viridis'))
-    fig_heatmap.update_layout(title='Correlation between Features', xaxis_nticks=36)
-    st.plotly_chart(fig_heatmap)
