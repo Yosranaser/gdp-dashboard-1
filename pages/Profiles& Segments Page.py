@@ -37,7 +37,7 @@ with open('kmeans_model (1).pkl', 'rb') as file:
     kmeans = pickle.load(file)
 
 # Define the required columns for prediction
-required_columns = ['Quantity', 'UnitPrice']
+required_columns = df['Quantity', 'UnitPrice']
 
 # Check if all required columns are present in the dataset
 missing_columns = [col for col in required_columns if col not in df.columns]
