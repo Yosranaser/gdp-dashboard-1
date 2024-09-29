@@ -40,7 +40,7 @@ with open('kmeans_model (1).pkl', 'rb') as file:
 # df = preprocess(df)  # Add your preprocessing steps here if necessary
 
 # Predict the clusters using the K-Means model
-df['Cluster'] = kmeans.predict(df['Quantity','UnitPrice','CustomerID'])
+df['Cluster'] = kmeans.predict(df[['Quantity','UnitPrice','CustomerID']])
 
 # Now, you can access the unique clusters
 unique_segments = df['Cluster'].unique()
