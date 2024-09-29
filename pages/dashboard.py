@@ -1,52 +1,63 @@
-import streamlit as st
 import pandas as pd
-import numpy as np
-from sklearn.preprocessing import StandardScaler
-import joblib
-from PIL import Image
-from datetime import datetime, date
-import matplotlib.pyplot as plt
-import seaborn as sns
 import plotly.express as px
+import plotly.graph_objects as go
+import streamlit as st
 
+# Load the dataset
+df = pd.read_csv("Mall_Customers.csv")
 
-# Setting page configuration
-st.set_page_config(page_title="Acustomer segmenation", page_icon="✈️", layout='wide')
+# Display the dataframe for reference
+st.write(df.head())
 
+# Create two rows with three columns each to distribute the charts
 
-# Loading data
-df = pd.read_csv('cleaned_df.csv')
+# Row 1: Age Distribution, Annual Income Distribution, Spending Score Distribution
+st.write("### Row 1: Basic Distributions")
+col1, col2, col3 = st.columns(3)
 
+# 1. Age Distribution
+with col1:
+    st.write("#### Age Distribution")
+    fig_age = px.histogram(df, x='Age', nbins=20, title='Age Distribution of Customers', marginal='box')
+    st.plotly_chart(fig_age)
 
-with st.sidebar:
+# 2. Annual Income Distribution
+with col2:
+    st.write("#### Annual Income Distribution")
+    fig_income = px.histogram(df, x='Annual Income (k$)', nbins=20, title='Annual Income Distribution of Customers', marginal='box')
+    st.plotly_chart(fig_income)
 
-    st.sidebar.image('R.jpg')
-    st.sidebar.subheader("This dashboard for Indian Aviation Flights Fare aimed at predicting the prices of flight tickets")
-    st.sidebar.write("")
-    
-    data = df.copy()
-    source = st.sidebar.selectbox("Departure City", ['All'] + list(data['Source'].unique()))
-    # data after Source selection
-    if source != 'All':
-        data = data[data['Source'] == source]
-    
-    destination = st.sidebar.selectbox("Arrival City", ['All'] + list(data['Destination'].unique()))
-    # data after Source and Destination selection
-    if destination != 'All':
-        data = data[data['Destination'] == destination]
+# 3. Spending Score Distribution
+with col3:
+    st.write("#### Spending Score Distribution")
+    fig_spending = px.histogram(df, x='Spending Score (1-100)', nbins=20, title='Spending Score Distribution of Customers', marginal='box')
+    st.plotly_chart(fig_spending)
 
-    duration = data[(data['Source'] == source) & (data['Destination'] == destination)]
-    
-    airline = st.sidebar.selectbox("Airline Carrier", ['All'] + list(data['Airline'].unique()))
-    # data after Source and Destination and Month and Day selection and departure hour selection and airline selection
-    if airline != 'All':
-        data = data[data['Airline'] == airline]
+# Row 2: Scatter Plot, Gender Distribution, Heatmap
+st.write("### Row 2: Advanced Visualizations")
+col4, col5, col6 = st.columns(3)
 
-    add_info = st.sidebar.selectbox("Additional Services", ['All'] + list(data['Additional_Info'].unique()))
+# 4. Scatter Plot: Annual Income vs Spending Score
+with col4:
+    st.write("#### Annual Income vs Spending Score")
+    fig_scatter = px.scatter(df, x='Annual Income (k$)', y='Spending Score (1-100)', title='Annual Income vs Spending Score', color='Gender', hover_data=['Age'])
+    st.plotly_chart(fig_scatter)
 
-    filter_box = st.sidebar.selectbox("Filter Prices on", [None, 'Day', 'Month', 'Dep_Hour'])
+# 5. Gender Distribution Pie Chart
+with col5:
+    st.write("#### Gender Distribution")
+    gender_counts = df['Gender'].value_counts()
+    fig_gender = px.pie(values=gender_counts, names=gender_counts.index, title='Gender Distribution of Customers')
+    st.plotly_chart(fig_gender)
 
-
-
-    st.sidebar.write("")
-    st.sidebar.markdown("Made by [Hussein zayed](https://github.com/HusseinZayed)")
+# 6. Heatmap: Correlations between features
+with col6:
+    st.write("#### Feature Correlation Heatmap")
+    corr = df.corr()
+    fig_heatmap = go.Figure(data=go.Heatmap(
+        z=corr.values,
+        x=corr.columns,
+        y=corr.columns,
+        colorscale='Viridis'))
+    fig_heatmap.update_layout(title='Correlation between Features', xaxis_nticks=36)
+    st.plotly_chart(fig_heatmap)
