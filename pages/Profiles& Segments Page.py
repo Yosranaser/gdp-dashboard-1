@@ -25,4 +25,4 @@ def profile_section(data):
         plt.figure(figsize=(10, 5))
         plt.hist(data['TotalSpent'], bins=30)
         st.pyplot(plt)
-profile_section(data)
+profile_section(df)
