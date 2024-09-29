@@ -80,6 +80,31 @@ with col5:
 
 # 6. Heatmap: Correlations between features
 with col6:
+    # Check for non-numeric columns
+non_numeric_columns = df.select_dtypes(exclude=['number']).columns.tolist()
+if non_numeric_columns:
+    st.write("### Non-Numeric Columns")
+    st.write(non_numeric_columns)
+
+# Optionally, you can drop non-numeric columns if they are not needed for correlation
+df_numeric = df.select_dtypes(include=['number'])
+
+# Calculate correlation matrix if there are numeric columns
+if not df_numeric.empty:
+    corr = df_numeric.corr()
+    st.write("### Correlation Matrix")
+    st.write(corr)
+else:
+    st.error("No numeric columns available for correlation.")
+
+# Other visualizations can follow...
+try:
+    df_filtered = df.dropna(subset=['Annual Income (k$)', 'Spending Score (1-100)', 'Genre', 'Age'])
+    fig_scatter = px.scatter(df_filtered, x='Annual Income (k$)', y='Spending Score (1-100)', 
+                             title='Annual Income vs Spending Score', color='Genre', hover_data=['Age'])
+    st.plotly_chart(fig_scatter)
+except KeyError as e:
+    st.error(f"KeyError: One of the specified columns does not exist: {e}")
     st.write("#### Feature Correlation Heatmap")
     corr = df.corr()
     fig_heatmap = go.Figure(data=go.Heatmap(
