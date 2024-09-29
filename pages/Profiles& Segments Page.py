@@ -21,11 +21,18 @@ def load_data():
             return None
 
 # Load data
-#df = load_data()
+df = load_data()
 
 # Page title
 st.title("Customer Profiles / Segments")
+with open('model(1).pkl', 'rb') as file:
+    kmeans = pickle.load(file)
 
+# Predict the clusters using the K-Means model
+df['Cluster'] = kmeans.predict(df)
+
+# Now, you can access the unique clusters
+unique_segments = df['Cluster'].unique()
 # Select customer segment to display its characteristics
 unique_segments = df['Cluster'].unique()
 selected_segment = st.selectbox("Select Customer Segment", unique_segments)
