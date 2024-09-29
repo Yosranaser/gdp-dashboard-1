@@ -25,7 +25,7 @@ df = load_data()
 
 # Page title
 st.title("Customer Profiles / Segments")
-with open('model(1).pkl', 'rb') as file:
+with open('model (1).pkl', 'rb') as file:
     kmeans = pickle.load(file)
 
 # Predict the clusters using the K-Means model
