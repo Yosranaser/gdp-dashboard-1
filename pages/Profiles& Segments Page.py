@@ -31,7 +31,7 @@ if df is None:
 
 # Page title
 st.title("Customer Profiles / Segments")
-
+st.write(df.columns)
 # Load the K-Means model
 with open('kmeans_model (1).pkl', 'rb') as file:
     kmeans = pickle.load(file)
