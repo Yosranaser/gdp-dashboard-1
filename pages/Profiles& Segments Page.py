@@ -1,12 +1,11 @@
-
 import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle
+
 # Sample function to load your clustered data
-# Assuming you have a 'Segment' column indicating customer segment
 def load_data():
     st.title("Upload Your Dataset")
     uploaded_file = st.file_uploader("Upload your CSV file", type="csv")
@@ -15,26 +14,38 @@ def load_data():
         try:
             df = pd.read_csv(uploaded_file)
         except UnicodeDecodeError:
-            data = pd.read_csv(uploaded_file, encoding='ISO-8859-1')
+            df = pd.read_csv(uploaded_file, encoding='ISO-8859-1')
         except Exception as e:
             st.error(f"Error reading the file: {e}")
             return None
+        return df
+    else:
+        return None
 
 # Load data
 df = load_data()
 
+# Stop execution if no data is loaded
+if df is None:
+    st.stop()
+
 # Page title
 st.title("Customer Profiles / Segments")
+
+# Load the K-Means model
 with open('kmeans_model (1).pkl', 'rb') as file:
     kmeans = pickle.load(file)
+
+# Ensure the dataset is prepared the same way it was during training
+# df = preprocess(df)  # Add your preprocessing steps here if necessary
 
 # Predict the clusters using the K-Means model
 df['Cluster'] = kmeans.predict(df)
 
 # Now, you can access the unique clusters
 unique_segments = df['Cluster'].unique()
+
 # Select customer segment to display its characteristics
-unique_segments = df['Cluster'].unique()
 selected_segment = st.selectbox("Select Customer Segment", unique_segments)
 
 # Filter the dataset for the selected segment
@@ -47,9 +58,8 @@ st.write(segment_data.describe())
 # Visualize the distribution of features for the selected segment
 st.write("### Feature Distributions")
 
-# Create a few important plots for each feature
 for col in df.columns:
-    if col != 'Predicted_Cluster':  # Exclude the 'Segment' column itself
+    if col != 'Cluster':  # Exclude the 'Cluster' column itself
         fig, ax = plt.subplots()
         sns.histplot(segment_data[col], kde=True, ax=ax)
         ax.set_title(f"Distribution of {col} for Segment {selected_segment}")
@@ -60,6 +70,12 @@ st.write("### Radar Chart of Key Features")
 
 # Define key features to visualize (replace with your own)
 key_features = ['Quantity', 'UnitPrice', 'CustomerID']  # Replace with relevant features
+
+# Check if key features exist in the dataset
+for feature in key_features:
+    if feature not in df.columns:
+        st.error(f"Feature '{feature}' not found in the dataset.")
+        st.stop()
 
 # Create a dataframe to store the mean of these features
 segment_means = segment_data[key_features].mean()
