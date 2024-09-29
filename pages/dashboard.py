@@ -48,20 +48,29 @@ st.write(df.dtypes)
 # Display the first few rows of the DataFrame
 st.write("### Preview of DataFrame")
 st.write(df.head())
+with col4:
+st.write("### Available Columns in DataFrame")
+st.write(df.columns.tolist())
 
-# Display the DataFrame columns
-st.write("### DataFrame Columns")
+# Strip whitespace from column names
+df.columns = df.columns.str.strip()
+
+# Check columns again after stripping
+st.write("### Available Columns After Stripping Whitespace")
 st.write(df.columns.tolist())
 
 # Filter out rows with missing values in the specified columns
-df_filtered = df.dropna(subset=['Annual Income (k$)', 'Spending Score (1-100)', 'Gender', 'Age'])
+try:
+    df_filtered = df.dropna(subset=['Annual Income (k$)', 'Spending Score (1-100)', 'Gender', 'Age'])
+except KeyError as e:
+    st.error(f"KeyError: One of the specified columns does not exist: {e}")
+    st.stop()
 
 # Row 2: Scatter Plot: Annual Income vs Spending Score
-with col4:
-    st.write("#### Annual Income vs Spending Score")
-    fig_scatter = px.scatter(df_filtered, x='Annual Income (k$)', y='Spending Score (1-100)', 
-                             title='Annual Income vs Spending Score', color='Gender', hover_data=['Age'])
-    st.plotly_chart(fig_scatter)
+st.write("#### Annual Income vs Spending Score")
+fig_scatter = px.scatter(df_filtered, x='Annual Income (k$)', y='Spending Score (1-100)', 
+                         title='Annual Income vs Spending Score', color='Gender', hover_data=['Age'])
+st.plotly_chart(fig_scatter)
 
 with col5:
     st.write("#### Gender Distribution")
