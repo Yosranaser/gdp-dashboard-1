@@ -38,13 +38,31 @@ st.write("### Row 2: Advanced Visualizations")
 col4, col5, col6 = st.columns(3)
 
 # 4. Scatter Plot: Annual Income vs Spending Score
-st.write(df[['Annual Income (k$)', 'Spending Score (1-100)']].isnull().sum())
-df_filtered = df.dropna(subset=['Annual Income (k$)', 'Spending Score (1-100)'])
+# Load your DataFrame (assuming it's already loaded)
+df = pd.read_csv('Mall_Customers.csv')
+
+# Check the columns and data types
+st.write("### DataFrame Columns and Data Types")
+st.write(df.dtypes)
+
+# Display the first few rows of the DataFrame
+st.write("### Preview of DataFrame")
+st.write(df.head())
+
+# Display the DataFrame columns
+st.write("### DataFrame Columns")
+st.write(df.columns.tolist())
+
+# Filter out rows with missing values in the specified columns
+df_filtered = df.dropna(subset=['Annual Income (k$)', 'Spending Score (1-100)', 'Gender', 'Age'])
+
+# Row 2: Scatter Plot: Annual Income vs Spending Score
 with col4:
     st.write("#### Annual Income vs Spending Score")
-    fig_scatter = px.scatter(df_filtered, x='Annual Income (k$)', y='Spending Score (1-100)', title='Annual Income vs Spending Score', color='Gender', hover_data=['Age'])
+    fig_scatter = px.scatter(df_filtered, x='Annual Income (k$)', y='Spending Score (1-100)', 
+                             title='Annual Income vs Spending Score', color='Gender', hover_data=['Age'])
     st.plotly_chart(fig_scatter)
-# 5. Gender Distribution Pie Chart
+
 with col5:
     st.write("#### Gender Distribution")
     gender_counts = df['Gender'].value_counts()
