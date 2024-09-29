@@ -6,7 +6,7 @@ from sklearn.cluster import KMeans
 # Function to take user input and return as DataFrame
 def user_input_features():
     st.sidebar.header('Enter Customer Information')
-    
+
     # Taking input from user
     genre = st.sidebar.selectbox('Gender', ('Male', 'Female'))
     age = st.sidebar.number_input('Age', min_value=18, max_value=100, value=25)
@@ -18,23 +18,22 @@ def user_input_features():
             'Age': age,
             'Annual Income (k$)': annual_income,
             'Spending Score (1-100)': spending_score}
-    
-    features = pd.DataFrame([data])  # Store user input in DataFrame
-    return features
+
+    return pd.DataFrame([data])
 
 # Load and preprocess data for fitting K-means
 def load_and_preprocess_data():
     # Loading the dataset
     df = pd.read_csv('Mall_Customers.csv')
-    
+
     # Preprocessing: Encode Genre, scale Age, Annual Income, and Spending Score
     df['Genre'] = LabelEncoder().fit_transform(df['Genre'])
     X = df[['Genre', 'Age', 'Annual Income (k$)', 'Spending Score (1-100)']]
-    
+
     # Standardizing the numerical features
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
-    
+
     return X_scaled, scaler
 
 # Function to preprocess user input the same way the dataset was preprocessed
@@ -44,7 +43,7 @@ def preprocess_user_input(input_data, scaler):
 
     # Standardize the features
     input_scaled = scaler.transform(input_data)
-    
+
     return input_scaled
 
 # Function to predict cluster using the K-means model
@@ -72,7 +71,7 @@ def main():
 
     # Load and preprocess the dataset for training the K-means model
     X_scaled, scaler = load_and_preprocess_data()
-    
+
     # Train the K-means model (assuming 5 clusters as an example)
     kmeans_model = KMeans(n_clusters=5, random_state=42)
     kmeans_model.fit(X_scaled)
@@ -80,24 +79,26 @@ def main():
     # Take user input
     user_data = user_input_features()
 
-    # Preprocess user input for the model
-    input_scaled = preprocess_user_input(user_data, scaler)
+    # Show a submit button
+    if st.sidebar.button("Submit"):
+        # Preprocess user input for the model
+        input_scaled = preprocess_user_input(user_data, scaler)
 
-    # Predict the cluster for the user's input
-    cluster = predict_cluster(kmeans_model, input_scaled)
+        # Predict the cluster for the user's input
+        cluster = predict_cluster(kmeans_model, input_scaled)
 
-    # Add the predicted cluster to the user data
-    user_data['Cluster'] = cluster[0]
+        # Add the predicted cluster to the user data
+        user_data['Cluster'] = cluster[0]
 
-    # Save the user data to a CSV and get the updated DataFrame
-    updated_data = save_data_to_csv(user_data)
+        # Save the user data to a CSV and get the updated DataFrame
+        updated_data = save_data_to_csv(user_data)
 
-    # Display the predicted cluster
-    st.write(f"The customer belongs to Cluster: {cluster[0]}")
+        # Display the predicted cluster
+        st.write(f"The customer belongs to Cluster: {cluster[0]}")
 
-    # Display the updated table with all user inputs
-    st.write("Updated User Data:")
-    st.dataframe(updated_data)
+        # Display the updated table with all user inputs
+        st.write("Updated User Data:")
+        st.dataframe(updated_data)
 
 if __name__ == "__main__":
     main()
