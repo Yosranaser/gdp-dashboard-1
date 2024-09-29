@@ -38,11 +38,12 @@ st.write("### Row 2: Advanced Visualizations")
 col4, col5, col6 = st.columns(3)
 
 # 4. Scatter Plot: Annual Income vs Spending Score
+st.write(df[['Annual Income (k$)', 'Spending Score (1-100)']].isnull().sum())
+df_filtered = df.dropna(subset=['Annual Income (k$)', 'Spending Score (1-100)'])
 with col4:
     st.write("#### Annual Income vs Spending Score")
-    fig_scatter = px.scatter(df, x='Annual Income (k$)', y='Spending Score (1-100)', title='Annual Income vs Spending Score', color='Gender', hover_data=['Age'])
+    fig_scatter = px.scatter(df_filtered, x='Annual Income (k$)', y='Spending Score (1-100)', title='Annual Income vs Spending Score', color='Gender', hover_data=['Age'])
     st.plotly_chart(fig_scatter)
-
 # 5. Gender Distribution Pie Chart
 with col5:
     st.write("#### Gender Distribution")
