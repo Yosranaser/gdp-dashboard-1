@@ -59,7 +59,7 @@ with col4:
     
     # Filter out rows with missing values in the specified columns
     try:
-        df_filtered = df.dropna(subset=['Annual Income (k$)', 'Spending Score (1-100)', 'Gender', 'Age'])
+        df_filtered = df.dropna(subset=['Annual Income (k$)', 'Spending Score (1-100)', 'Genre', 'Age'])
     except KeyError as e:
         st.error(f"KeyError: One of the specified columns does not exist: {e}")
         st.stop()
@@ -67,7 +67,7 @@ with col4:
     # Row 2: Scatter Plot: Annual Income vs Spending Score
     st.write("#### Annual Income vs Spending Score")
     fig_scatter = px.scatter(df_filtered, x='Annual Income (k$)', y='Spending Score (1-100)', 
-                             title='Annual Income vs Spending Score', color='Gender', hover_data=['Age'])
+                             title='Annual Income vs Spending Score', color='Genre', hover_data=['Age'])
     st.plotly_chart(fig_scatter)
 
 with col5:
@@ -97,9 +97,9 @@ with col6:
     
     # Other visualizations can follow...
     try:
-        df_filtered = df.dropna(subset=['Annual Income (k$)', 'Spending Score (1-100)', 'Gender', 'Age'])
+        df_filtered = df.dropna(subset=['Annual Income (k$)', 'Spending Score (1-100)', 'Genre', 'Age'])
         fig_scatter = px.scatter(df_filtered, x='Annual Income (k$)', y='Spending Score (1-100)', 
-                                 title='Annual Income vs Spending Score', color='Gender', hover_data=['Age'])
+                                 title='Annual Income vs Spending Score', color='Genre', hover_data=['Age'])
         st.plotly_chart(fig_scatter)
     except KeyError as e:
         st.error(f"KeyError: One of the specified columns does not exist: {e}")
