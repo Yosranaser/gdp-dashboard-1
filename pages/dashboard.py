@@ -72,7 +72,7 @@ with col4:
 
 with col5:
     st.write("#### Gender Distribution")
-    gender_counts = df['Gender'].value_counts()
+    gender_counts = df['Genre'].value_counts()
     fig_gender = px.pie(values=gender_counts, names=gender_counts.index, title='Gender Distribution of Customers')
     st.plotly_chart(fig_gender)
 
