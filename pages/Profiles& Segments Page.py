@@ -6,6 +6,7 @@ import seaborn as sns
 import pickle
 
 # Function to load the data
+# Function to load the data
 def load_data():
     st.title("Upload Your Dataset")
     uploaded_file = st.file_uploader("Upload your CSV file", type="csv")
@@ -13,14 +14,20 @@ def load_data():
     if uploaded_file is not None:
         try:
             df = pd.read_csv(uploaded_file)
+            return df
         except UnicodeDecodeError:
-            df = pd.read_csv(uploaded_file, encoding='ISO-8859-1')
+            try:
+                df = pd.read_csv(uploaded_file, encoding='ISO-8859-1')
+                return df
+            except Exception as e:
+                st.error(f"Error reading the file: {e}")
+                return None
         except Exception as e:
             st.error(f"Error reading the file: {e}")
             return None
-        return df
     else:
         return None
+
 
 # Load data
 df = load_data()
