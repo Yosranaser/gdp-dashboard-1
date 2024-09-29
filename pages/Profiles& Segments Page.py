@@ -33,7 +33,9 @@ if df is None:
 st.title("Customer Profiles / Segments")
 st.write(df.columns)
 df = df.rename(columns={'539737':'InvoiceNo', '21949':'StockCode','SET OF 6 STRAWBERRY CHOPSTICKS':'Description','1':'Quantity','12/21/2010 15:19':'InvoiceDate','2.51':'UnitPrice','United Kingdom':'Country'})
+st.write(df.columns)
 # Load the K-Means model
+
 with open('kmeans_model (1).pkl', 'rb') as file:
     kmeans = pickle.load(file)
 
