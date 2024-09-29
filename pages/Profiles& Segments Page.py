@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+import pickle
 # Sample function to load your clustered data
 # Assuming you have a 'Segment' column indicating customer segment
 def load_data():
