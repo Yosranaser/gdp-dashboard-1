@@ -10,11 +10,14 @@ encoder = LabelEncoder()
 def user_input_features():
     st.sidebar.header('Enter Customer Information')
 
-    # Taking input from user
-    genre = st.sidebar.selectbox('Gender', ('Male', 'Female'))
-    age = st.sidebar.number_input('Age', min_value=18, max_value=100, value=25)
-    annual_income = st.sidebar.number_input('Annual Income (k$)', min_value=15, max_value=150, value=60)
-    spending_score = st.sidebar.number_input('Spending Score (1-100)', min_value=1, max_value=100, value=50)
+    
+
+    # User Data Input
+    st.sidebar.header("Enter Your Information")
+    age = st.sidebar.number_input("Enter your Age:", min_value=1, max_value=100, value=25, step=1)
+    annual_income = st.sidebar.number_input("Enter your Annual Income (k$):", min_value=10, max_value=150, value=50, step=1)
+    spending_score = st.sidebar.slider("Enter your Spending Score (1-100):", min_value=1, max_value=100, value=50)
+    gender = st.sidebar.radio("Select your Gender:", options=["Male", "Female"])
 
     # Creating a dataframe from the inputs
     data = {'Genre': genre,
