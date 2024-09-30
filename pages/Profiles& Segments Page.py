@@ -17,7 +17,7 @@ def user_input_features():
     age = st.sidebar.number_input("Enter your Age:", min_value=1, max_value=100, value=25, step=1)
     annual_income = st.sidebar.number_input("Enter your Annual Income (k$):", min_value=10, max_value=150, value=50, step=1)
     spending_score = st.sidebar.slider("Enter your Spending Score (1-100):", min_value=1, max_value=100, value=50)
-    gender = st.sidebar.radio("Select your Gender:", options=["Male", "Female"])
+    genre = st.sidebar.radio("Select your Gender:", options=["Male", "Female"])
 
     # Creating a dataframe from the inputs
     data = {'Genre': genre,
