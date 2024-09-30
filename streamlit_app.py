@@ -1,44 +1,37 @@
 import streamlit as st
-import pickle
-import pandas as pd
-from sklearn.cluster import KMeans
-import sklearn
-st.title("KMeans Model Predictor")
-st.image("Customer-Segmentation.png", caption="Customer-Segmentation", use_column_width=True)
 
-# Sidebar for input
-st.sidebar.title("Input Data")
+# Page setup
+st.set_page_config(page_title="Customer Segmentation - K-means", layout="centered")
 
-# Taking inputs from the user in the sidebar
-unit_price = st.sidebar.number_input("Enter Unit Price", min_value=0.0, step=0.01)  # Use a float step for unit price
-quantity = st.sidebar.number_input("Enter Quantity", min_value=0, step=1)  # Integer step for quantity
-customer_id = st.sidebar.text_input("Enter Customer ID")
+# Introduction
+st.title("Customer Segmentation using K-means")
+st.subheader("Welcome to the Customer Segmentation Web Application")
 
-stock_code = st.sidebar.text_input("Enter Stock Code")
-day = st.sidebar.number_input("Enter day", min_value=0, step=1)  # Integer step for day
-month = st.sidebar.number_input("Enter month", min_value=0, step=1)  # Integer step for month
-year = st.sidebar.number_input("Enter year", min_value=0, step=1)  # Integer step for year
-# Country selection
-countries = [
-    'United Kingdom', 'France', 'Australia', 'Netherlands', 'Germany',
-    'Norway', 'EIRE', 'Switzerland', 'Spain', 'Poland', 'Portugal',
-    'Italy', 'Belgium', 'Lithuania', 'Japan', 'Iceland',
-    'Channel Islands', 'Denmark', 'Cyprus', 'Sweden', 'Austria',
-    'Israel', 'Finland', 'Bahrain', 'Greece', 'Hong Kong', 'Singapore',
-    'Lebanon', 'United Arab Emirates', 'Saudi Arabia',
-    'Czech Republic', 'Canada', 'Unspecified', 'Brazil', 'USA',
-    'European Community', 'Malta'
-]
-selected_country = st.selectbox("Choose your country", countries)
+# Abstract
+st.markdown("""
+### Abstract:
+This web application helps you explore customer segmentation using the K-means clustering algorithm. 
+Customer segmentation is the practice of dividing customers into groups based on common characteristics 
+such as age, salary, spending score, and gender. This model helps businesses understand customer behavior 
+and target different customer segments effectively.
 
-# Product description selection
-descriptions = [
-    'WHITE HANGING HEART T-LIGHT HOLDER', 'WHITE METAL LANTERN',
-    'CREAM CUPID HEARTS COAT HANGER', 'add stock to allocate online orders',
-    'for online retail orders'
-]
-selected_description = st.selectbox("Choose a description", descriptions)
+In this application, users can input their personal information (age, salary, gender, and spending score) 
+and the K-means model will analyze the data to place the user into one of the predefined customer segments.
+""")
 
+# User Data Input
+st.sidebar.header("Enter Your Information")
+age = st.sidebar.number_input("Enter your Age:", min_value=1, max_value=100, value=25, step=1)
+annual_income = st.sidebar.number_input("Enter your Annual Income (k$):", min_value=10, max_value=150, value=50, step=1)
+spending_score = st.sidebar.slider("Enter your Spending Score (1-100):", min_value=1, max_value=100, value=50)
+gender = st.sidebar.radio("Select your Gender:", options=["Male", "Female"])
 
+# Display user input
+st.write("### User Information:")
+st.write(f"Age: {age}")
+st.write(f"Annual Income: {annual_income}k$")
+st.write(f"Spending Score: {spending_score}")
+st.write(f"Gender: {gender}")
 
-
+# Placeholder for K-means clustering result
+st.write("The K-means model will place you into a customer segment based on the information you have provided.")
