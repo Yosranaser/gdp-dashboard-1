@@ -110,3 +110,22 @@ with col6:
         st.plotly_chart(fig_heatmap)
     else:
         st.error("No numeric columns available for correlation.")
+st.markdown("""
+    1. Age Distribution Insights:
+Age range: The majority of customers seem to be between 20 and 40 years old.
+Peak age group: The highest bar indicates that the most common age range for customers is around 30 years.
+Spread and outliers: The box plot shows that the age distribution is fairly spread out, with some customers in older age brackets (above 60) being possible outliers.
+What to learn: This could indicate that the business primarily attracts younger adults, suggesting that marketing efforts may need to focus on this demographic, or alternatively, strategies could be developed to attract older customers.
+
+2. Annual Income Distribution Insights:
+Income range: Most customers have an annual income between 40k and 80k.
+Peak income group: The highest concentration of customers falls in the middle-income group (~60k).
+Outliers: There seems to be a few customers with significantly higher income (beyond 100k), which might represent high-end or premium customers.
+What to learn: Understanding this income distribution can help in tailoring product offerings and pricing strategies. For example, if a large portion of customers have mid-range incomes, products and services should be priced accordingly.
+
+3. Spending Score Distribution Insights:
+Spending score range: The spending scores are spread widely across the scale (1–100), with notable peaks around both lower and higher scores.
+Bimodal pattern: There are two prominent clusters, one around a low spending score (~30) and another around a high spending score (~70).
+What to learn: This suggests two distinct customer segments based on spending behavior—one that spends relatively less and another that spends significantly more. This could inform differentiated marketing approaches or product recommendations for low vs. high spenders.
+    
+    """)
