@@ -110,7 +110,7 @@ with col6:
         st.plotly_chart(fig_heatmap)
     else:
         st.error("No numeric columns available for correlation.")
-st.markdown("""
+st.markdown(""" ###conclusion:
     1. Age Distribution Insights:
 Age range: The majority of customers seem to be between 20 and 40 years old.
 Peak age group: The highest bar indicates that the most common age range for customers is around 30 years.
@@ -128,4 +128,8 @@ Spending score range: The spending scores are spread widely across the scale (1â
 Bimodal pattern: There are two prominent clusters, one around a low spending score (~30) and another around a high spending score (~70).
 What to learn: This suggests two distinct customer segments based on spending behaviorâ€”one that spends relatively less and another that spends significantly more. This could inform differentiated marketing approaches or product recommendations for low vs. high spenders.
     
+General Insights:
+Customer segmentation: These distributions suggest there are potential segments to focus on. For example, younger, middle-income, high-spending customers could be one target group, while older, high-income, low-spending customers might require a different strategy.
+Pricing and marketing strategies: The bimodal spending score distribution indicates that offering a mix of premium and budget products/services could capture the different spending behaviors.
+Understanding these patterns helps in aligning marketing efforts, product development, and customer engagement strategies based on the characteristics of your customer base
     """)
