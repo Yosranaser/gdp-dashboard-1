@@ -39,10 +39,10 @@ def model_overview():
 # Example: Using the function for the page navigation
 if st.sidebar.selectbox("Choose a page", ["User Input", "Dashboard", "Model Overview"]) == "Model Overview":
     model_overview()
-st.title("Click the Link to Watch a YouTube Video")
-
-# Define the YouTube link
-youtube_link = "https://youtu.be/ZWbft0LbZ3g?si=gnjnNo7BrpUNQt60"
-
-# Display the clickable link
-st.markdown(f"[Click here to watch the video]({youtube_link})", unsafe_allow_html=True)
+    st.title("Click the Link to Watch a YouTube Video")
+    
+    # Define the YouTube link
+    youtube_link = "https://youtu.be/ZWbft0LbZ3g?si=gnjnNo7BrpUNQt60"
+    
+    # Display the clickable link
+    st.markdown(f"[Click here to watch the video]({youtube_link})", unsafe_allow_html=True)
