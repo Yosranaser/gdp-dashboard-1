@@ -19,19 +19,6 @@ In this application, users can input their personal information (age, salary, ge
 and the K-means model will analyze the data to place the user into one of the predefined customer segments.
 """)
 
-# User Data Input
-st.sidebar.header("Enter Your Information")
-age = st.sidebar.number_input("Enter your Age:", min_value=1, max_value=100, value=25, step=1)
-annual_income = st.sidebar.number_input("Enter your Annual Income (k$):", min_value=10, max_value=150, value=50, step=1)
-spending_score = st.sidebar.slider("Enter your Spending Score (1-100):", min_value=1, max_value=100, value=50)
-gender = st.sidebar.radio("Select your Gender:", options=["Male", "Female"])
-
-# Display user input
-st.write("### User Information:")
-st.write(f"Age: {age}")
-st.write(f"Annual Income: {annual_income}k$")
-st.write(f"Spending Score: {spending_score}")
-st.write(f"Gender: {gender}")
 
 # Placeholder for K-means clustering result
 st.write("The K-means model will place you into a customer segment based on the information you have provided.")
