@@ -1,71 +1,74 @@
 import streamlit as st
-import pandas as pd
-from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
+import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
-# Function to load CSV data from user input
+# Page setup
+st.set_page_config(page_title="K-means Model Evaluation", layout="wide")
+
+# Introduction
+st.title("Evaluate K-means Model")
+st.write("In this section, we evaluate the K-means clustering model to find the optimal number of clusters.")
+
+# Load dataset (for demonstration, replace with actual data loading)
+@st.cache
 def load_data():
-    st.title("Upload Your Dataset")
-    uploaded_file = st.file_uploader("Upload your CSV file", type="csv")
-    
-    if uploaded_file is not None:
-        try:
-            data = pd.read_csv(uploaded_file)
-        except UnicodeDecodeError:
-            data = pd.read_csv(uploaded_file, encoding='ISO-8859-1')
-        except Exception as e:
-            st.error(f"Error reading the file: {e}")
-            return None
-            
-        st.write("Dataset preview:")
-        st.write(data.head())
-        st.write("Column names in the dataset:")
-        st.write(data.columns.tolist())  # Display column names for debugging
-        return data
-    else:
-        st.warning("Please upload a CSV file.")
-        return None
+    # Assuming the dataset is similar to the Mall_Customers.csv
+    data = pd.read_csv('Mall_Customers.csv')
+    return data
 
-# Preprocessing function to prepare the dataset for K-means
-def preprocess_data(data):
-    # Display the column names
-    st.write("Column names in the dataset:")
-    st.write(data.columns.tolist())
-    
-    # Strip any leading/trailing spaces from column names
-    data.columns = data.columns.str.strip()
-    
-    # Adjust these feature names according to your actual dataset
-    try:
-        features = data[['Quantity', 'UnitPrice', 'CustomerID']]
-    except KeyError as e:
-        st.error(f"KeyError: {e}. Please check the column names in your dataset.")
-        return None
-    
-    # Standardize the features
-    scaler = StandardScaler()
-    X = scaler.fit_transform(features)
-    
-    return X
+df = load_data()
 
-# Cluster evaluation function (your previous implementation)
-def cluster_evaluation(X):
-    st.title("Cluster Evaluation")
-    # [Your cluster evaluation code goes here]
+# Sidebar for cluster selection
+st.sidebar.header("K-means Model Parameters")
+num_clusters = st.sidebar.slider("Select number of clusters (K):", min_value=2, max_value=10, value=5)
 
-# Main function
-def main():
-    # Sidebar navigation
-    page = st.sidebar.selectbox("Choose a page", ["User Input", "Dashboard", "Model Overview", "Cluster Evaluation"])
+# Extract features (e.g., age, income, spending score)
+features = df[['Age', 'Annual Income (k$)', 'Spending Score (1-100)']]
+
+# K-means Model
+kmeans = KMeans(n_clusters=num_clusters, random_state=42)
+cluster_labels = kmeans.fit_predict(features)
+
+# Evaluation metrics
+st.write("### Model Evaluation")
+
+# Inertia (within-cluster sum of squares)
+inertia = kmeans.inertia_
+st.write(f"**Inertia (Within-cluster sum of squares)**: {inertia:.2f}")
+
+# Silhouette Score
+silhouette_avg = silhouette_score(features, cluster_labels)
+st.write(f"**Silhouette Score**: {silhouette_avg:.2f} (ranges from -1 to 1, higher is better)")
+
+# Elbow method (visualizing inertia for different K values)
+def plot_elbow_method(data):
+    inertia_values = []
+    k_range = range(1, 11)
+    for k in k_range:
+        kmeans = KMeans(n_clusters=k, random_state=42)
+        kmeans.fit(data)
+        inertia_values.append(kmeans.inertia_)
     
-    if page == "Cluster Evaluation":
-        data = load_data()  # Get user input
-        if data is not None:
-            X = preprocess_data(data)
-            if X is not None:
-                cluster_evaluation(X)
+    plt.figure(figsize=(10, 6))
+    sns.lineplot(x=list(k_range), y=inertia_values, marker='o')
+    plt.title("Elbow Method to Determine Optimal K")
+    plt.xlabel("Number of Clusters (K)")
+    plt.ylabel("Inertia")
+    plt.xticks(k_range)
+    st.pyplot(plt.gcf())
 
-if __name__ == "__main__":
-    main()
+# Display elbow method plot
+st.write("### Elbow Method for Optimal Number of Clusters")
+plot_elbow_method(features)
+
+# Optional: Visualizing clusters (scatter plot)
+st.write("### Cluster Visualization")
+fig, ax = plt.subplots(figsize=(10, 6))
+sns.scatterplot(x='Annual Income (k$)', y='Spending Score (1-100)', hue=cluster_labels, data=df, palette='viridis', ax=ax)
+plt.scatter(kmeans.cluster_centers_[:, 1], kmeans.cluster_centers_[:, 2], s=200, c='red', label='Centroids', marker='X')
+plt.title(f'K-means Clustering with {num_clusters} Clusters')
+plt.legend()
+st.pyplot(fig)
